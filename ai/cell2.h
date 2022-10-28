@@ -2,8 +2,9 @@
 class cell2 {
 public:
 
-	int score;
-	int weight[10];
+	double score;
+	double weight[10][10];
 	void loss(int);
-	int giveScore();
+	double giveScore();
+	void init();
 };

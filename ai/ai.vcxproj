@@ -131,6 +131,7 @@
     <ClCompile Include="cell1.cpp" />
     <ClCompile Include="cell2.cpp" />
     <ClCompile Include="inputcell.cpp" />
+    <ClCompile Include="result.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cell1.h" />

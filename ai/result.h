@@ -1,4 +1,7 @@
 #pragma once
 class result {
-	int score[10];
+public:
+	double MAX();
+	double score[10];
+	void init();
 };
