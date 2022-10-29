@@ -3,6 +3,7 @@
 #include<cstdlib>
 void cell1::loss(int)
 {
+
 }
 
 double cell1::giveScore()
