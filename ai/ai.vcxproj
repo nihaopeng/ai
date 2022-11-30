@@ -132,12 +132,14 @@
     <ClCompile Include="cell2.cpp" />
     <ClCompile Include="inputcell.cpp" />
     <ClCompile Include="result.cpp" />
+    <ClCompile Include="ui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cell1.h" />
     <ClInclude Include="cell2.h" />
     <ClInclude Include="inputcell.h" />
     <ClInclude Include="result.h" />
+    <ClInclude Include="ui.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

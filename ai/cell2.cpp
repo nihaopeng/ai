@@ -1,8 +1,17 @@
 #include "cell2.h"
 #include<ctime>
 #include<cstdlib>
-void cell2::loss(int)
+double cell2::loss(double loss,int pos)
 {
+	double temp = this->weight[pos];
+	if (this->weight[pos] * this->score == 0)
+	{
+		return 0;
+	}
+	else {
+		this->weight[pos] = this->weight[pos] - loss;
+		return loss;
+	}
 }
 
 double cell2::giveScore()
@@ -13,12 +22,8 @@ double cell2::giveScore()
 void cell2::init()
 {
 	srand(time(0));
-	for (int i = 0; i < 10; i++)
+	for (int i = 1; i < 10; i++)
 	{
-		for (int j = 0; j < 10; j++)
-		{
-			this->weight[i][j] = (rand() % 100 + 1) / 100.0;
-			//srand(this->weight[i][j]);
-		}
+			this->weight[i] = (rand() % 100 + 1) / 100.0;
 	}
 }

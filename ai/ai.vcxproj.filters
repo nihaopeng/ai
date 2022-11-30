@@ -30,6 +30,9 @@
     <ClCompile Include="result.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ui.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cell1.h">
@@ -42,6 +45,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="result.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ui.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

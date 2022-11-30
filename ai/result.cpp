@@ -7,8 +7,23 @@ double result::MAX()
 
 void result::init()
 {
-    for (int i = 0; i < 10; i++)
+    for (int i = 1; i < 10; i++)
     {
         this->score[i] = 0;
     }
+}
+
+int result::definePos()
+{
+    double max = -1;
+    int maxi = 0;
+    for (int i = 1; i < 10; i++)
+    {
+        if (this->score[i] > max)
+        {
+            max = this->score[i];
+            maxi = i;
+        } 
+    }
+    return maxi;
 }
