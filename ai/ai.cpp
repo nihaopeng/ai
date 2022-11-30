@@ -30,6 +30,9 @@ int calc(inputcell*& in, cell1*& c1, cell2*& c2, result& re) {
 		}
 	}
 }
+void Relu(inputcell*& in, cell1*& c1, cell2*& c2, result& re) {
+
+}
 int main()
 {
 	//前向传播
@@ -51,8 +54,6 @@ int main()
 	result re;
 	re.init();
 	
-	while (1) {
-
-	}
+	
 	return 0;
 }
