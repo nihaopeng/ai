@@ -4,5 +4,5 @@ public:
 	double MAX();
 	double score[10];
 	void init();
-	int definePos();
+	int definePos(int chequer[10]);
 };

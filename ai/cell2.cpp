@@ -21,7 +21,10 @@ double cell2::giveScore()
 
 void cell2::init()
 {
-	srand(time(0));
+	for (int i = 0; i < 10; i++)
+	{
+		this->score = 0;
+	}
 	for (int i = 1; i < 10; i++)
 	{
 			this->weight[i] = (rand() % 100 + 1) / 100.0;
