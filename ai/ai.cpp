@@ -6,7 +6,7 @@
 #include"result.h"
 #include"ui.h"
 using namespace std;
-void calc(inputcell*& in, cell1*& c1, cell2*& c2, result& re) {
+void calc(inputcell* in, cell1* c1, cell2* c2, result& re) {
 	for (int i = 1; i < 10; i++)//哪个位置
 	{
 		//第一层
@@ -32,7 +32,7 @@ void calc(inputcell*& in, cell1*& c1, cell2*& c2, result& re) {
 		}
 	}
 }
-void Relu(inputcell*& in, cell1*& c1, cell2*& c2, result& re, int pos, double loss) {
+void Relu(inputcell* in, cell1* c1, cell2* c2, result& re, int pos, double loss) {
 	for (int i = 1; i < 10; i++)
 	{
 		double effectC2 = c2[i].loss(loss, pos);
@@ -69,11 +69,25 @@ void peopleTurn(int chequer[10],ui &u) {
 	cin >> choice;
 	chequer[choice] = 1;
 	u.printChequer(choice, '@');
+	system("pause");
 }
-void compuTurn() {
-
+void compuTurn(int chequer[10],inputcell* in, cell1* c1, cell2* c2, result& re,double &loss, ui& u) {
+	for (int i = 1; i < 10; i++)
+	{
+		in[i].score = chequer[i];
+	}
+	calc(in,c1, c2, re);
+	chequer[re.definePos()] = 1;
+	loss += 0.25;
+	u.memory(re.definePos());
+	for (int i = 1; i < 10; i++)
+	{
+		cout << re.score[i] << endl;
+	}
+	system("pause");
+	u.printChequer(re.definePos(), '#');
 }
-void totalProcess(int chequer[10], inputcell*& in, cell1*& c1, cell2*& c2, result& re)
+void totalProcess(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result &re)
 {
 	for (int i = 1; i < 10; i++)
 	{
@@ -83,12 +97,25 @@ void totalProcess(int chequer[10], inputcell*& in, cell1*& c1, cell2*& c2, resul
 	ui u;
 	u.init();
 	while (1) {
+		peopleTurn(chequer, u);
 		if (judge(chequer))
 		{
-
+			for (int i = 0; i < u.compu.size(); i++)
+			{
+				Relu(in, c1, c2, re, u.compu[i], -log10(loss));
+				return;
+			}
+		}
+		compuTurn(chequer, in, c1, c2, re, loss, u);
+		if (judge(chequer))
+		{
+			for (int i = 0; i < u.compu.size(); i++)
+			{
+				Relu(in, c1, c2, re, u.compu[i], -log10(loss));
+				return;
+			}
 		}
 	}
-	
 }
 int main()
 {
@@ -110,7 +137,8 @@ int main()
 	}
 	result re;
 	re.init();
-	
+	int chequer[10] = { 0 };
+	totalProcess(chequer, in, c1, c2, re);
 	
 	return 0;
 }

@@ -21,8 +21,11 @@ void ui::init()
 
 void ui::printChequer(int pos,char ch)
 {
-	system("clean");
-	Chequer[pos] = 'ch';
+	system("cls");
+	Chequer[pos] = ch;
+	hold[0] = Chequer[1]; hold[2] = Chequer[2]; hold[4] = Chequer[3]; 
+	hold[10] = Chequer[4]; hold[12] = Chequer[5]; hold[14] = Chequer[6]; 
+	hold[20] = Chequer[7]; hold[22] = Chequer[8]; hold[24] = Chequer[9];
 	for (int i = 0; i < 25; i++)
 	{
 		if (i % 5 == 0)
@@ -31,4 +34,9 @@ void ui::printChequer(int pos,char ch)
 		}
 		cout << hold[i];
 	}
+}
+
+void ui::memory(int pos)
+{
+	this->compu.push_back(pos);
 }
