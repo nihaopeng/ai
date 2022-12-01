@@ -106,7 +106,7 @@ void compuTurn(int chequer[10],inputcell* in, cell1* c1, cell2* c2, result& re,d
 	calc(chequer,in,c1, c2, re);
 	for (int i = 1; i < 10; i++)
 	{
-		cout << re.score[i] << " " << chequer[i] << endl;
+		cout << re.score[i] << " " <<chequer[i] << i << endl;
 		//cout << chequer[i] << endl;
 	}
 	int pos = re.definePos(chequer);
@@ -132,7 +132,7 @@ void totalProcess(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result &
 			for (int i = 0; i < u.compu.size(); i++)
 			{
 				Relu(in, c1, c2, re, u.compu[i], -log10(loss));
-				cout << "you win" << endl;
+				cout << "you win" <<loss<< endl;
 				return;
 			}
 		}
@@ -142,8 +142,8 @@ void totalProcess(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result &
 		{
 			for (int i = 0; i < u.compu.size(); i++)
 			{
-				Relu(in, c1, c2, re, u.compu[i], -log10(loss));
-				cout << "you lose" << endl;
+				Relu(in, c1, c2, re, u.compu[i], -5);
+				cout << "you lose" <<loss<< endl;
 				return;
 			}
 		}

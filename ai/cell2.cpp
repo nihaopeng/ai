@@ -4,18 +4,22 @@
 double cell2::loss(double loss,int pos)
 {
 	double temp = this->weight[pos];
-	if (loss == 0)
-	{
-		this->weight[pos] = this->weight[pos] +0.5;
-		return -0.5;
-	}
+	
 	if (this->weight[pos] * this->score[pos] == 0)
 	{
 		return 0;
 	}
 	else {
-		this->weight[pos] = this->weight[pos] - loss;
-		return loss;
+		if (loss == 0)
+		{
+			this->weight[pos] = this->weight[pos] + 10;
+			return -10;
+		}
+		else {
+			this->weight[pos] = this->weight[pos] - loss;
+			return loss;
+		}
+		
 	}
 }
 

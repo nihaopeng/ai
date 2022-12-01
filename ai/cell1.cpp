@@ -3,13 +3,22 @@
 #include<cstdlib>
 double cell1::loss(double loss,int pos,int cell,double effect)
 {
+	
 	if (this->weight[pos][cell] * this->score[pos] == 0 || effect == 0)
 	{
 		return 0;
 	}
 	else {
-		this->weight[pos][cell] -= loss;
-		return loss;
+		if (loss == 0)
+		{
+			this->weight[pos][cell] = this->weight[pos][cell] + 10;
+			return -10;
+		}
+		else {
+			this->weight[pos][cell] -= loss;
+			return loss;
+		}
+		
 	}
 }
 
