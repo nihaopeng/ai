@@ -15,8 +15,8 @@ void result::init()
 
 int result::definePos(int chequer[10])
 {
-    double max = -1;
-    int maxi = 0;
+    double max = this->score[1];
+    int maxi = 1;
     for (int i = 1; i < 10; i++)
     {
         if (this->score[i] > max&&chequer[i]==0)
@@ -26,4 +26,12 @@ int result::definePos(int chequer[10])
         } 
     }
     return maxi;
+}
+
+void result::renew()
+{
+    for (int i = 1; i < 10; i++)
+    {
+        this->score[i] = 0;
+    }
 }

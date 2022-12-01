@@ -6,7 +6,16 @@
 #include"result.h"
 #include"ui.h"
 using namespace std;
-void calc(inputcell* in, cell1* c1, cell2* c2, result& re) {
+void calc(int chequer[10],inputcell* in, cell1* c1, cell2* c2, result& re);
+void Relu(inputcell* in, cell1* c1, cell2* c2, result& re, int pos, double loss);
+int judge(ui u,int cnt);
+void peopleTurn(int chequer[10], ui& u);
+void compuTurn(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result& re, double& loss, ui& u);
+void totalProcess(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result& re);
+void renewAll(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result& re);
+
+void calc(int chequer[10],inputcell* in, cell1* c1, cell2* c2, result& re) {
+	
 	for (int i = 1; i < 10; i++)//哪个位置
 	{
 		//第一层
@@ -14,8 +23,7 @@ void calc(inputcell* in, cell1* c1, cell2* c2, result& re) {
 		{
 			for (int k = 1; k < 10; k++)//对第几个输入
 			{
-				c1[j].score += in[k].weight[i][j] * in[k].score;
-				//cout << c1[j].score;
+				c1[j].score[i] += in[k].weight[i][j] * in[k].score;
 			}
 		}
 		//第二层
@@ -23,13 +31,14 @@ void calc(inputcell* in, cell1* c1, cell2* c2, result& re) {
 		{
 			for (int k = 1; k < 10; k++)
 			{
-				c2[j].score += c1[k].score * c1[k].weight[i][j];
+				c2[j].score[i] += c1[k].score[i] * c1[k].weight[i][j];
+				//cout << c1[k].weight[i][j] << endl;
 			}
 		}
 		//结果层
 		for (int j = 1; j < 10; j++)
 		{
-			re.score[i] += c2[j].score * c2[j].weight[i];
+			re.score[i] += c2[j].score[i] * c2[j].weight[i];
 		}
 	}
 }
@@ -47,7 +56,7 @@ void Relu(inputcell* in, cell1* c1, cell2* c2, result& re, int pos, double loss)
 		}
 	}
 }
-int judge(ui u)
+int judge(ui u,int cnt)
 {
 	if ((u.Chequer[1]=='@' && u.Chequer[2] == '@' && u.Chequer[3] == '@') ||
 		(u.Chequer[4] == '@' && u.Chequer[5] == '@' && u.Chequer[6] == '@') ||
@@ -68,12 +77,16 @@ int judge(ui u)
 		{
 		return 1;
 	}
+	else if (cnt == 9)
+	{
+		return 1;
+	}
 	else {
 		return 0;
 	}
 }
 void peopleTurn(int chequer[10],ui &u) {
-	cout << "turn to you:" << endl;
+	cout <<endl<< "turn to you:" << endl;
 	int choice;
 	cin >> choice;
 	chequer[choice] = 1;
@@ -81,51 +94,66 @@ void peopleTurn(int chequer[10],ui &u) {
 	system("pause");
 }
 void compuTurn(int chequer[10],inputcell* in, cell1* c1, cell2* c2, result& re,double &loss, ui& u) {
-	for (int i = 1; i < 10; i++)
-	{
-		in[i].score = chequer[i];
-		//cout << in[i].score << endl;
-	}
-	calc(in,c1, c2, re);
-	chequer[re.definePos(chequer)] = 1;
+	renewAll(chequer, in, c1, c2, re);
+	calc(chequer,in,c1, c2, re);
+	int pos = re.definePos(chequer);
+	chequer[pos] = 1;
 	loss += 0.25;
-	u.memory(re.definePos(chequer));
-	for (int i = 1; i < 10; i++)
+	u.memory(pos);
+	/*for (int i = 1; i < 10; i++)
 	{
 		cout << re.score[i] << endl;
-	}
+	}*/
+	cout << pos << endl;
 	system("pause");
-	u.printChequer(re.definePos(chequer), '#');
+	u.printChequer(pos, '#');
 }
 void totalProcess(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result &re)
 {
-	for (int i = 1; i < 10; i++)
-	{
-		in[i].score = chequer[i];
-	}
+	int cnt = 0;
 	double loss = 0;
 	ui u;
 	u.init();
 	while (1) {
 		peopleTurn(chequer, u);
-		if (judge(u))
+		cnt++;
+		if (judge(u,cnt))
 		{
 			for (int i = 0; i < u.compu.size(); i++)
 			{
 				Relu(in, c1, c2, re, u.compu[i], -log10(loss));
+				cout << "you win" << endl;
 				return;
 			}
 		}
+		
 		compuTurn(chequer, in, c1, c2, re, loss, u);
-		if (judge(u))
+		cnt++;
+		if (judge(u,cnt))
 		{
 			for (int i = 0; i < u.compu.size(); i++)
 			{
 				Relu(in, c1, c2, re, u.compu[i], -log10(loss));
+				cout << "you lose" << endl;
 				return;
 			}
 		}
 	}
+}
+void renewAll(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result& re) {
+	for (int i = 1; i < 10; i++)
+	{
+		in[i].score = chequer[i];
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		c1[i].renew();
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		c2[i].renew();
+	}
+	re.renew();
 }
 int main()
 {
@@ -148,8 +176,27 @@ int main()
 	}
 	result re;
 	re.init();
-	int chequer[10] = { 0 };
-	totalProcess(chequer, in, c1, c2, re);
+	while (1) {
+		int chequer[10] = { 0 };
+		totalProcess(chequer, in, c1, c2, re);
+		cout << "continue?(y/n)" << endl;
+		char choice;
+		cin >> choice;
+		flag:
+		if (choice == 'y')
+		{
+			continue;
+		}
+		else if(choice=='n')
+		{
+			cout << "bye" << endl;
+		}
+		else {
+			cout << "no this selection" << endl;
+			goto flag;
+		}
+	}
+	
 	
 	return 0;
 }
