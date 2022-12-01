@@ -15,7 +15,7 @@ void result::init()
 
 int result::definePos(int chequer[10])
 {
-    double max = this->score[1];
+    double max = -100000000;
     int maxi = 1;
     for (int i = 1; i < 10; i++)
     {

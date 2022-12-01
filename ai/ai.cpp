@@ -1,5 +1,6 @@
 ﻿#include<iostream>
 #include<cmath>
+#include<fstream>
 #include"inputcell.h"
 #include"cell1.h"
 #include"cell2.h"
@@ -13,6 +14,8 @@ void peopleTurn(int chequer[10], ui& u);
 void compuTurn(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result& re, double& loss, ui& u);
 void totalProcess(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result& re);
 void renewAll(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result& re);
+void save(inputcell* in, cell1* c1, cell2* c2, result& re);
+void load(inputcell* in, cell1* c1, cell2* c2, result& re);
 
 void calc(int chequer[10],inputcell* in, cell1* c1, cell2* c2, result& re) {
 	
@@ -88,7 +91,12 @@ int judge(ui u,int cnt)
 void peopleTurn(int chequer[10],ui &u) {
 	cout <<endl<< "turn to you:" << endl;
 	int choice;
+	f:
 	cin >> choice;
+	if (chequer[choice] == 1) {
+		cout <<endl<< "valid input,retry" << endl;
+		goto f;
+	}
 	chequer[choice] = 1;
 	u.printChequer(choice, '@');
 	system("pause");
@@ -96,14 +104,16 @@ void peopleTurn(int chequer[10],ui &u) {
 void compuTurn(int chequer[10],inputcell* in, cell1* c1, cell2* c2, result& re,double &loss, ui& u) {
 	renewAll(chequer, in, c1, c2, re);
 	calc(chequer,in,c1, c2, re);
+	for (int i = 1; i < 10; i++)
+	{
+		cout << re.score[i] << " " << chequer[i] << endl;
+		//cout << chequer[i] << endl;
+	}
 	int pos = re.definePos(chequer);
 	chequer[pos] = 1;
 	loss += 0.25;
 	u.memory(pos);
-	/*for (int i = 1; i < 10; i++)
-	{
-		cout << re.score[i] << endl;
-	}*/
+	
 	cout << pos << endl;
 	system("pause");
 	u.printChequer(pos, '#');
@@ -126,7 +136,6 @@ void totalProcess(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result &
 				return;
 			}
 		}
-		
 		compuTurn(chequer, in, c1, c2, re, loss, u);
 		cnt++;
 		if (judge(u,cnt))
@@ -155,6 +164,28 @@ void renewAll(int chequer[10], inputcell* in, cell1* c1, cell2* c2, result& re) 
 	}
 	re.renew();
 }
+void save(inputcell* in, cell1* c1, cell2* c2, result& re) {
+	remove("../model.dat");
+	ofstream out("../model.dat", ios::binary | ios::out | ios::app);
+	for (int i = 1; i < 10; i++)
+	{
+		out.write((char*)&in[i], sizeof(in[i]));
+		out.write((char*)&c1[i], sizeof(c1[i]));
+		out.write((char*)&c2[i], sizeof(c2[i]));
+	}
+	out.close();
+}
+void load(inputcell* in, cell1* c1, cell2* c2, result& re)
+{
+	ifstream indata("../model.dat", ios::binary | ios::in);
+	for (int i = 1; i < 10; i++)
+	{
+		indata.read((char*)&in[i], sizeof(in[i]));
+		indata.read((char*)&c1[i], sizeof(c1[i]));
+		indata.read((char*)&c2[i], sizeof(c2[i]));
+	}
+	indata.close();
+}
 int main()
 {
 	//前向传播
@@ -175,6 +206,12 @@ int main()
 		c2[i].init();
 	}
 	result re;
+	load(in, c1, c2, re);
+	for (int i = 1; i < 10; i++)
+	{
+		cout << c2[i].weight[1] << endl;
+		system("pause");
+	}
 	re.init();
 	while (1) {
 		int chequer[10] = { 0 };
@@ -190,13 +227,14 @@ int main()
 		else if(choice=='n')
 		{
 			cout << "bye" << endl;
+			break;
 		}
 		else {
 			cout << "no this selection" << endl;
 			goto flag;
 		}
 	}
-	
+	save(in, c1, c2, re);
 	
 	return 0;
 }
